@@ -490,7 +490,7 @@ static const yytype_uint8 yyrline[] =
      101,   105,   107,   109,   111,   113,   115,   117,   119,   121,
      125,   127,   131,   133,   137,   141,   143,   145,   147,   149,
      151,   155,   157,   159,   171,   173,   175,   177,   181,   183,
-     185,   187,   192,   194,   198,   200
+     185,   187,   192,   194,   204,   206
 };
 #endif
 
@@ -1665,7 +1665,7 @@ yyreduce:
     break;
 
   case 44:
-#line 198 "miniL.y" /* yacc.c:1646  */
+#line 204 "miniL.y" /* yacc.c:1646  */
     {
     printf("ident -> IDENT %s\n", (yyvsp[0].ident_val));
 }
@@ -1673,7 +1673,7 @@ yyreduce:
     break;
 
   case 45:
-#line 200 "miniL.y" /* yacc.c:1646  */
+#line 206 "miniL.y" /* yacc.c:1646  */
     {
     printf("ident -> IDENT COMMA ident %s\n", (yyvsp[-2].ident_val));
 }
@@ -1909,7 +1909,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 204 "miniL.y" /* yacc.c:1906  */
+#line 210 "miniL.y" /* yacc.c:1906  */
 
 
 void yyerror(const char* msg) {

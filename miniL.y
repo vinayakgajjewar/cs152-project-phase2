@@ -43,7 +43,7 @@
 
 %left AND
 %left OR
-%left NOT //right?
+%right NOT //right?
 
 %token TRUE
 %token FALSE
@@ -110,9 +110,9 @@ statement: var ASSIGN expression {
     printf("statement -> WHILE boolexp BEGINLOOP statements ENDLOOP\n");
 } | DO BEGINLOOP statements ENDLOOP WHILE boolexp {
     printf("statement -> DO BEGINLOOP statements ENDLOOP WHILE boolexp\n");
-} | READ var {
+} | READ vars {
     printf("statement -> READ var\n");
-} | WRITE var {
+} | WRITE vars {
     printf("statement -> WRITE var\n");
 } | CONTINUE {
     printf("statement -> CONTINUE\n");
@@ -193,6 +193,12 @@ var: ident {
     printf("var -> ident\n");
 } | ident L_SQUARE_BRACKET expression R_SQUARE_BRACKET {
     printf("var -> ident L_SQUARE_BRACKET expression R_SQUARE_BRACKET\n");
+}
+
+vars: var {
+    printf("vars -> var\n");
+} | var COMMA vars {
+    printf("vars -> var COMMA vars\n");
 }
 
 ident: IDENT {
