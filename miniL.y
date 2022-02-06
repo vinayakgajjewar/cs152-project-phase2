@@ -11,7 +11,7 @@
 }
 
 %error-verbose
-%locations
+/* %locations */
 %start program
 
 %token <ident_val> IDENT
@@ -40,9 +40,10 @@
 %token CONTINUE
 %token READ
 %token WRITE
+
 %left AND
 %left OR
-%left NOT
+%left NOT //right?
 
 %token TRUE
 %token FALSE
@@ -92,6 +93,8 @@ declaration: ident COLON INTEGER {
 } | ident COLON ARRAY L_SQUARE_BRACKET NUMBER R_SQUARE_BRACKET OF INTEGER {
     printf("declaration -> ident COLON ARRAY L_SQUARE_BRACKET NUMBER %d R_SQUARE_BRACKET OF INTEGER\n", $5);
 }
+
+
 
 statements: statement SEMICOLON statements {
     printf("statements -> statement SEMICOLON statements\n");
@@ -157,6 +160,14 @@ expression: multexpr {
     printf("expression -> multexpr SUB expression\n");
 }
 
+expressions: %empty {
+    printf("expressions -> epsilon\n");
+} | expression {
+    printf("expressions -> expression\n");
+} | expression COMMA expressions {
+    printf("expressions -> expression COMMA expressions\n");
+}
+
 multexpr: term {
     printf("multexpr -> term\n");
 } | term MULT multexpr {
@@ -177,13 +188,6 @@ term: var {
     printf("term -> ident L_PAREN expressions R_PAREN\n");
 }
 
-expressions: %empty {
-    printf("expressions -> epsilon\n");
-} | expression {
-    printf("expressions -> expression\n");
-} | expression COMMA expressions {
-    printf("expressions -> expression COMMA expressions\n");
-}
 
 var: ident {
     printf("var -> ident\n");
@@ -193,6 +197,8 @@ var: ident {
 
 ident: IDENT {
     printf("ident -> IDENT %s\n", $1);
+} | IDENT COMMA ident {
+    printf("ident -> IDENT COMMA ident %s\n", $1);
 }
 
 %%
