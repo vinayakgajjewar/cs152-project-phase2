@@ -2,7 +2,6 @@
    
 %{   
    /* write your C code here for definitions of variables and including headers */
-   #include "y.tab.h"
    int rowNum = 1;
    int colNum = 0;
 %}
@@ -16,55 +15,55 @@ NEWLINE           [\n]
 %%
    /* specific lexer rules in regex */
 
-"function"        {return FUNCTION;colNum+=8;}
-"beginparams"     {return BEGIN_PARAMS;colNum+=11;}
-"endparams"       {return END_PARAMS;colNum+=9;}
-"beginlocals"     {return BEGIN_LOCALS;colNum+=11;}
-"endlocals"       {return END_LOCALS;colNum+=9;}
-"beginbody"       {return BEGIN_BODY;colNum+=9;}
-"endbody"         {return END_BODY;colNum+=7;}
-"integer"         {return INTEGER;colNum+=7;}
-"array"           {return ARRAY;colNum+=5;}
-"of"              {return OF;colNum+=2;}
-"if"              {return IF;colNum+=2;}
-"then"            {return THEN;colNum+=4;}
-"endif"           {return ENDIF;colNum+=5;}
-"else"            {return ELSE;colNum+=4;}
-"while"           {return WHILE;colNum+=5;}
-"do"              {return DO;colNum+=2;}
-"beginloop"       {return BEGINLOOP;colNum+=9;}
-"endloop"         {return ENDLOOP;colNum+=7;}
-"continue"        {return CONTINUE;colNum+=8;}
-"break"           {return BREAK;colNum+=5;}
-"read"            {return READ;colNum+=4;}
-"write"           {return WRITE;colNum+=5;}
-"not"             {return NOT;colNum+=3;}
-"true"            {return TRUE;colNum+=4;}
-"false"           {return FALSE;colNum+=5;}
-"return"          {return RETURN;colNum+=6;}
+"function"        {printf("FUNCTION\n");colNum+=8;}
+"beginparams"     {printf("BEGIN_PARAMS\n");colNum+=11;}
+"endparams"       {printf("END_PARAMS\n");colNum+=9;}
+"beginlocals"     {printf("BEGIN_LOCALS\n");colNum+=11;}
+"endlocals"       {printf("END_LOCALS\n");colNum+=9;}
+"beginbody"       {printf("BEGIN_BODY\n");colNum+=9;}
+"endbody"         {printf("END_BODY\n");colNum+=7;}
+"integer"         {printf("INTEGER\n");colNum+=7;}
+"array"           {printf("ARRAY\n");colNum+=5;}
+"of"              {printf("OF\n");colNum+=2;}
+"if"              {printf("IF\n");colNum+=2;}
+"then"            {printf("THEN\n");colNum+=4;}
+"endif"           {printf("ENDIF\n");colNum+=5;}
+"else"            {printf("ELSE\n");colNum+=4;}
+"while"           {printf("WHILE\n");colNum+=5;}
+"do"              {printf("DO\n");colNum+=2;}
+"beginloop"       {printf("BEGINLOOP\n");colNum+=9;}
+"endloop"         {printf("ENDLOOP\n");colNum+=7;}
+"continue"        {printf("CONTINUE\n");colNum+=8;}
+"break"           {printf("BREAK\n");colNum+=5;}
+"read"            {printf("READ\n");colNum+=4;}
+"write"           {printf("WRITE\n");colNum+=5;}
+"not"             {printf("NOT\n");colNum+=3;}
+"true"            {printf("TRUE\n");colNum+=4;}
+"false"           {printf("FALSE\n");colNum+=5;}
+"return"          {printf("RETURN\n");colNum+=6;}
 
-":="              {return ASSIGN; colNum+=2;}
-","               {return COMMA;colNum++;}
-"["               {return L_SQUARE_BRACKET;colNum++;}
-"]"               {return R_SQUARE_BRACKET;colNum++;}
-"("               {return L_PAREN;colNum++;}
-")"               {return R_PAREN;colNum++;}
+":="              {printf("ASSIGN\n");colNum+=2;}
+","               {printf("COMMA\n");colNum++;}
+"["               {printf("L_SQUARE_BRACKET\n");colNum++;}
+"]"               {printf("R_SQUARE_BRACKET\n");colNum++;}
+"("               {printf("L_PAREN\n");colNum++;}
+")"               {printf("R_PAREN\n");colNum++;}
 
-";"               {return SEMICOLON;colNum++;}
-":"               {return COLON;colNum++;}
+";"               {printf("SEMICOLON\n");colNum++;}
+":"               {printf("COLON\n");colNum++;}
 
 
-"-"               {return SUB;colNum++;}
-"+"               {return ADD;colNum++;}
-"*"               {return MULT;colNum++;}
-"/"               {return DIV;colNum++;}
-"%"               {return MOD;colNum++;}
-"=="              {return EQ;colNum+=2;}
-"<>"              {return NEQ;colNum+=2;}
-"<"               {return LT;colNum++;}
-">"               {return GT;colNum++;}
-"<="              {return LTE;colNum+=2;}
-">="              {return GTE;colNum+=2;}
+"-"               {printf("SUB\n");colNum++;}
+"+"               {printf("ADD\n");colNum++;}
+"*"               {printf("MULT\n");colNum++;}
+"/"               {printf("DIV\n");colNum++;}
+"%"               {printf("MOD\n");colNum++;}
+"=="              {printf("EQ\n");colNum+=2;}
+"<>"              {printf("NEQ\n");colNum+=2;}
+"<"               {printf("LT\n");colNum++;}
+">"               {printf("GT\n");colNum++;}
+"<="              {printf("LTE\n");colNum+=2;}
+">="              {printf("GTE\n");colNum+=2;}
 
 
 {DIGIT}+ {
@@ -101,7 +100,10 @@ NEWLINE           [\n]
 
 int yyparse();
 
-int main(int argc, char ** argv) {
-   // yylex();
+int main(int argc, char ** argv)
+{
    yyparse();
+   //yylex();
+
+   return 0;
 }
