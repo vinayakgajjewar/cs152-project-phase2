@@ -1686,7 +1686,7 @@ yyreduce:
   case 46:
 #line 205 "miniL.y" /* yacc.c:1646  */
     {
-    printf("ident -> IDENT %s\n", (yyvsp[0].ident_val));
+    printf("ident -> IDENT %s\n", yytext);
 }
 #line 1692 "y.tab.c" /* yacc.c:1646  */
     break;
