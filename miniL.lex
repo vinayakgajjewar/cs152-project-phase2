@@ -1,128 +1,109 @@
-
-/* Include Stuff */
-%{
-  #include "y.tab.h"
-  
-  int lineNum = 1, lineCol = 0;
+   /* cs152-miniL phase1 */
+   
+%{   
+   /* write your C code here for definitions of variables and including headers */
+   #include "y.tab.h"
+   int rowNum = 1;
+   int colNum = 0;
 %}
 
-/* Define Patterns */
-DIGIT [0-9]
-DIGIT_UNDERSCORE [0-9_]
-LETTER [a-zA-Z]
-LETTER_UNDERSCORE [a-zA-Z_]
-CHAR [0-9a-zA-Z_]
-ALPHANUMER [0-9a-zA-Z]
-WHITESPACE [\t ]
-NEWLINE [\n]
+   /* some common rules */
+LETTER            [A-Za-z]
+DIGIT             [0-9]
+WHITESPACE        [\t ]
+NEWLINE           [\n]
 
-/* Define Rules */
 %%
+   /* specific lexer rules in regex */
 
-"-"       return SUB; ++lineCol;
-"+"       return ADD; ++lineCol;
-"*"       return MULT; ++lineCol;
-"/"       return DIV; ++lineCol;
-"%"       return MOD; ++lineCol;
+"function"        return FUNCTION; colNum+=8;
+"beginparams"     return BEGIN_PARAMS; colNum+=11;
+"endparams"       return END_PARAMS; colNum+=9;
+"beginlocals"     return BEGIN_LOCALS; colNum+=11;
+"endlocals"       return END_LOCALS; colNum+=9;
+"beginbody"       return BEGIN_BODY; colNum+=9;
+"endbody"         return END_BODY; colNum+=7;
+"integer"         return INTEGER; colNum+=7;
+"array"           return ARRAY; colNum+=5;
+"of"              return OF; colNum+=2;
+"if"              return IF; colNum+=2;
+"then"            return THEN; colNum+=4;
+"endif"           return ENDIF; colNum+=5;
+"else"            return ELSE; colNum+=4;
+"while"           return WHILE; colNum+=5;
+"do"              return DO; colNum+=2;
+"beginloop"       return BEGINLOOP; colNum+=9;
+"endloop"         return ENDLOOP; colNum+=7;
+"continue"        return CONTINUE; colNum+=8;
+"break"           return BREAK; colNum+=5;
+"read"            return READ; colNum+=4;
+"write"           return WRITE; colNum+=5;
+"not"             return NOT; colNum+=3;
+"true"            return TRUE; colNum+=4;
+"false"           return FALSE; colNum+=5;
+"return"          return RETURN; colNum+=6;
 
-"=="      return EQ; lineCol += 2;
-"<>"      return NEQ; lineCol += 2;
-"<"       return LT; ++lineCol;
-">"       return GT; ++lineCol;
-"<="      return LTE; lineCol += 2;
-">="      return GTE; lineCol += 2;
+":="              return ASSIGN; colNum+=2;
+","               return COMMA; colNum++;
+"["               return L_SQUARE_BRACKET; colNum++;
+"]"               return R_SQUARE_BRACKET; colNum++;
+"("               return L_PAREN; colNum++;
+")"               return R_PAREN; colNum++;
 
-"function"     return FUNCTION; lineCol += yyleng;
-"beginparams"  return BEGIN_PARAMS; lineCol += yyleng;
-"endparams"    return END_PARAMS;  lineCol += yyleng;
-"beginlocals"  return BEGIN_LOCALS; lineCol += yyleng;
-"endlocals"    return END_LOCALS; lineCol += yyleng;
-"beginbody"    return BEGIN_BODY; lineCol += yyleng;
-"endbody"      return END_BODY; lineCol += yyleng;
-"integer"      return INTEGER; lineCol += yyleng;
-"array"        return ARRAY; lineCol += yyleng;
-"of"           return OF; lineCol += yyleng;
-"if"           return IF; lineCol += yyleng;
-"then"         return THEN; lineCol += yyleng;
-"endif"        return ENDIF; lineCol += yyleng;
-"else"         return ELSE; lineCol += yyleng;
-"while"        return WHILE; lineCol += yyleng;
-"do"           return DO; lineCol += yyleng;
-"foreach"      return FOREACH; lineCol += yyleng;
-"in"           return IN; lineCol += yyleng;
-"beginloop"    return BEGINLOOP; lineCol += yyleng;
-"endloop"      return ENDLOOP; lineCol += yyleng;
-"continue"     return CONTINUE; lineCol += yyleng;
-"read"         return READ; lineCol += yyleng;
-"write"        return WRITE; lineCol += yyleng;
-"and"          return AND; lineCol += yyleng;
-"or"           return OR; lineCol += yyleng;
-"not"          return NOT; lineCol += yyleng;
-"true"         return TRUE; lineCol += yyleng;
-"false"        return FALSE; lineCol += yyleng;
-"return"       return RETURN; lineCol += yyleng;
+";"               return SEMICOLON; colNum++;
+":"               return COLON; colNum++;
 
-{LETTER}({CHAR}*{ALPHANUMER}+)? {
-  yylval.ident_val = yytext;
-  return IDENT;
-  lineCol += yyleng;
-	}
+
+"-"               return SUB; colNum++;
+"+"               return ADD; colNum++;
+"*"               return MULT; colNum++;
+"/"               return DIV; colNum++;
+"%"               return MOD; colNum++;
+"=="              return EQ; colNum+=2;
+"<>"              return NEQ; colNum+=2;
+"<"               return LT; colNum++;
+">"               return GT; colNum++;
+"<="              return LTE; colNum+=2;
+">="              return GTE; colNum+=2;
+
 
 {DIGIT}+ {
-  yylval.num_val = atoi(yytext);
-  return NUMBER;
-  lineCol += yyleng;
-       }
+    printf("NUMBER %s\n", yytext);
+    return NUMBER;
+    colNum += yyleng;
+}
 
-({DIGIT}+{LETTER_UNDERSCORE}{CHAR}*)|("_"{CHAR}+) {
-  printf("Error at line %d, column %d: identifier \"%s\" must begin with a letter.\n",
-	 lineNum, lineCol, yytext);
+({DIGIT}+({LETTER}|"_"))* {
+  printf("Error at line %d, column %d: identifier \"%s\" must begin with a letter.\n", rowNum, colNum, yytext);
   exit(1);
-		       }
-
-{LETTER}({CHAR}*{ALPHANUMER}+)?"_" {
-  printf("Error at line %d, column %d: identifier \"%s\" cannot end with an underscore.\n",\
-	 lineNum, lineCol, yytext);
+}
+{LETTER}({DIGIT}|{LETTER})*"_" {
+  printf("Error at line %d, column %d: identifier \"%s\" cannot end with an underscore.\n", rowNum, colNum, yytext);
   exit(1);
-			   }
+}
 
-";"       return SEMICOLON; ++lineCol;
-":"       return COLON; ++lineCol;
-","       return COMMA; ++lineCol;
-"("       return L_PAREN; ++lineCol;
-")"       return R_PAREN; ++lineCol;
-"["       return L_SQUARE_BRACKET; ++lineCol;
-"]"       return R_SQUARE_BRACKET; ++lineCol;
-":="      return ASSIGN; lineCol += 2;
+{LETTER}({LETTER}|{DIGIT}|"_")*({LETTER}|{DIGIT})* {
+    return IDENT;
+    printf("IDENT %s\n", yytext);
+    colNum += yyleng;
+}
 
-"##".*{NEWLINE} lineCol = 0; ++lineNum;
+{WHITESPACE}+   colNum += yyleng;
+{NEWLINE}+      rowNum += yyleng; colNum = 0;
 
-{WHITESPACE}+   lineCol += yyleng;
-{NEWLINE}+      lineNum += yyleng; lineCol = 0;
+"##".*{NEWLINE}
 
 . {
-  printf("Error at line %d, column %d: unrecognized symbol \"%s\" \n",
-	   lineNum, lineCol, yytext);
+  printf("Error at line %d, column %d: unrecognized symbol \"%s\" \n", rowNum, colNum, yytext);
   exit(1);
 }
 
 %%
 int yyparse();
+	/* C functions used in lexer */
 
-int main(int argc, char* argv[]) {
-  if (argc == 2) {
-    yyin = fopen(argv[1], "r");
-    if (yyin == 0) {
-      printf("Error opening file: %s\n", argv[1]);
-      exit(1);
-    }
-  }
-  else {
-    yyin = stdin;
-  }
-
-  //yylex();
-  yyparse();
-  
-  return 0;
+int main(int argc, char ** argv)
+{
+   yyparse();
+   return 0;
 }
