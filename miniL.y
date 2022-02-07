@@ -12,6 +12,7 @@
 
 %error-verbose
 /* %locations */
+
 %start program
 
 %token <ident_val> IDENT
@@ -102,8 +103,8 @@ statements: statement SEMICOLON statements {
     printf("statements -> statement SEMICOLON\n");
 }
 
-statement: var ASSIGN expression {
-    printf("statement -> var ASSIGN expression\n");
+statement: var ASSIGN expressions {
+    printf("statement -> var ASSIGN expressions\n");
 } | IF boolexp THEN statements elsestatement ENDIF {
     printf("statement -> IF boolexp THEN statements elsestatement ENDIF\n");
 } | WHILE boolexp BEGINLOOP statements ENDLOOP {
@@ -118,8 +119,8 @@ statement: var ASSIGN expression {
     printf("statement -> CONTINUE\n");
 } | BREAK {
     printf("statement -> BREAK\n");
-} | RETURN expression {
-    printf("statement -> RETURN expression\n");
+} | RETURN expressions {
+    printf("statement -> RETURN expressions\n");
 }
 
 elsestatement: %empty {
@@ -182,7 +183,7 @@ multexpr: term {
 term: var {
     printf("term -> var\n");
 } | NUMBER {
-    printf("term -> NUMBER %d\n", $1);
+    printf("term -> NUMBER\n");
 } | L_PAREN expression R_PAREN {
     printf("term -> L_PAREN expression R_PAREN\n");
 } | ident L_PAREN expression R_PAREN {
@@ -203,9 +204,9 @@ vars: var {
 }
 
 ident: IDENT {
-    printf("ident -> IDENT %s\n", $1);
+    printf("ident -> IDENT\n");
 } | IDENT COMMA ident {
-    printf("ident -> IDENT COMMA ident %s\n", $1);
+    printf("ident -> IDENT COMMA ident\n");
 }
 
 %%

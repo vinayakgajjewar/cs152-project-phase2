@@ -83,8 +83,8 @@ NEWLINE           [\n]
 }
 
 {LETTER}({LETTER}|{DIGIT}|"_")*({LETTER}|{DIGIT})* {
-    return IDENT;
     printf("IDENT %s\n", yytext);
+    return IDENT;
     colNum += yyleng;
 }
 
