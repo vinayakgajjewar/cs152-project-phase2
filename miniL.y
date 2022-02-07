@@ -152,6 +152,14 @@ comp: EQ {
     printf("comp -> GTE\n");
 }
 
+expressions: %empty {
+    printf("expressions -> epsilon\n");
+} | expression {
+    printf("expressions -> expression\n");
+} | expression COMMA expressions {
+    printf("expressions -> expression COMMA expressions\n");
+}
+
 expression: multexpr {
     printf("expression -> multexpr\n");
 } | multexpr ADD expression {
@@ -160,13 +168,6 @@ expression: multexpr {
     printf("expression -> multexpr SUB expression\n");
 }
 
-expressions: %empty {
-    printf("expressions -> epsilon\n");
-} | expression {
-    printf("expressions -> expression\n");
-} | expression COMMA expressions {
-    printf("expressions -> expression COMMA expressions\n");
-}
 
 multexpr: term {
     printf("multexpr -> term\n");
