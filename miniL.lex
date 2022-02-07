@@ -1,4 +1,4 @@
-   /* cs152-miniL phase1 */
+   /* cs152-miniL phase2 */
    
 %{   
    /* write your C code here for definitions of variables and including headers */
